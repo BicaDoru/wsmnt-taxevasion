@@ -1,0 +1,23 @@
+* { box-sizing: border-box; }
+body { font-family: system-ui, sans-serif; margin: 0; background: #f4f6fa; color: #1d2330; }
+header { padding: 24px; background: #1f2a44; color: #fff; }
+header h1 { margin: 0; }
+.hint { opacity: .7; margin: 4px 0 0; font-size: 14px; }
+main { display: grid; grid-template-columns: 360px 1fr; gap: 20px; padding: 20px; }
+.card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.card h2 { margin-top: 0; }
+form label { display: block; margin-bottom: 10px; font-size: 14px; }
+form input { width: 100%; padding: 8px; border: 1px solid #ccd2db; border-radius: 4px; margin-top: 4px; }
+.row { display: flex; gap: 8px; }
+button { padding: 8px 14px; border: 0; background: #2f6df5; color: #fff; border-radius: 4px; cursor: pointer; }
+button:hover { background: #2856c4; }
+#reset-btn { background: #6c7787; }
+table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+th, td { padding: 8px; border-bottom: 1px solid #e5e8ee; text-align: left; font-size: 14px; }
+tr:hover { background: #fafbfd; }
+.status { min-height: 18px; font-size: 13px; color: #555; }
+.status.error { color: #b00020; }
+.status.ok { color: #117a3d; }
+.actions button { padding: 4px 10px; font-size: 12px; margin-right: 4px; }
+.actions .del { background: #b00020; }
+@media (max-width: 800px) { main { grid-template-columns: 1fr; } }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WSMT — Products</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Products</h1>
+    <p class="hint">REST → RabbitMQ → Workers → PostgreSQL</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2 id="form-title">Create product</h2>
+      <form id="product-form">
+        <input type="hidden" id="id" />
+        <label>Name <input id="name" required maxlength="120" /></label>
+        <label>Description <input id="description" maxlength="500" /></label>
+        <label>Price <input id="price" type="number" step="0.01" min="0" required /></label>
+        <label>Stock <input id="stock" type="number" min="0" required /></label>
+        <div class="row">
+          <button type="submit" id="submit-btn">Create</button>
+          <button type="button" id="reset-btn">Reset</button>
+        </div>
+      </form>
+      <p id="status" class="status"></p>
+    </section>
+
+    <section class="card">
+      <h2>All products</h2>
+      <button id="refresh-btn">Refresh</button>
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Stock</th><th></th></tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

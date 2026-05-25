@@ -1,0 +1,76 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: wsmt
+      RABBITMQ_DEFAULT_PASS: wsmt
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbit_data:/var/lib/rabbitmq
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: wsmt
+      POSTGRES_PASSWORD: wsmt
+      POSTGRES_DB: wsmt
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wsmt"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  worker:
+    build: ./worker
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_USERNAME: wsmt
+      SPRING_RABBITMQ_PASSWORD: wsmt
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/wsmt
+      SPRING_DATASOURCE_USERNAME: wsmt
+      SPRING_DATASOURCE_PASSWORD: wsmt
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    deploy:
+      replicas: 2
+
+  gateway:
+    build: ./gateway
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_USERNAME: wsmt
+      SPRING_RABBITMQ_PASSWORD: wsmt
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      replicas: 2
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./client:/usr/share/nginx/html:ro
+    depends_on:
+      - gateway
+
+volumes:
+  rabbit_data:
+  pg_data:

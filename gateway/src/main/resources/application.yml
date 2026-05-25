@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: gateway
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: 5672
+    username: ${SPRING_RABBITMQ_USERNAME:wsmt}
+    password: ${SPRING_RABBITMQ_PASSWORD:wsmt}
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+      reply-timeout: 15000
+
+app:
+  exchange: products.exchange
+  routingKey: products

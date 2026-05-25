@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: worker
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: 5672
+    username: ${SPRING_RABBITMQ_USERNAME:wsmt}
+    password: ${SPRING_RABBITMQ_PASSWORD:wsmt}
+    listener:
+      simple:
+        acknowledge-mode: auto
+        prefetch: 5
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 1000
+          multiplier: 2.0
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/wsmt}
+    username: ${SPRING_DATASOURCE_USERNAME:wsmt}
+    password: ${SPRING_DATASOURCE_PASSWORD:wsmt}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect

@@ -1,0 +1,38 @@
+{
+  "users": [
+    { "name": "wsmt", "password": "wsmt", "tags": "administrator" }
+  ],
+  "vhosts": [
+    { "name": "/" }
+  ],
+  "permissions": [
+    { "user": "wsmt", "vhost": "/", "configure": ".*", "write": ".*", "read": ".*" }
+  ],
+  "exchanges": [
+    { "name": "products.exchange", "vhost": "/", "type": "direct", "durable": true, "auto_delete": false, "internal": false, "arguments": {} },
+    { "name": "products.dlx", "vhost": "/", "type": "direct", "durable": true, "auto_delete": false, "internal": false, "arguments": {} }
+  ],
+  "queues": [
+    {
+      "name": "products.commands",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "products.dlx",
+        "x-dead-letter-routing-key": "products.dead"
+      }
+    },
+    {
+      "name": "products.dead",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    { "source": "products.exchange", "vhost": "/", "destination": "products.commands", "destination_type": "queue", "routing_key": "products", "arguments": {} },
+    { "source": "products.dlx",      "vhost": "/", "destination": "products.dead",     "destination_type": "queue", "routing_key": "products.dead", "arguments": {} }
+  ]
+}
